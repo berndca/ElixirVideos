@@ -3,7 +3,6 @@ module Videos.Main (Action(..), Model, init, initialModel, update, view) where
 import Effects exposing (Effects)
 import Html exposing (Html, a, div, p, text)
 import Html.Attributes exposing (class, href, target)
-
 import Components.Table
 import Videos.Filter as Filter
 import Videos.WebApi as WebApi
@@ -54,8 +53,10 @@ update action model =
                 )
 
         FilterAction act ->
-            ( { model | filterState = Filter.update act model.filterState
-                      , header = Table.init }
+            ( { model
+                | filterState = Filter.update act model.filterState
+                , header = Table.init
+              }
             , Effects.none
             )
 
@@ -73,11 +74,14 @@ view address model =
         div
             [ class "main ui container" ]
             [ div [ class "ui large header" ] [ text "Elixir Videos" ]
-            , p [] [ text "The directory for youtube videos for the "
-                   , a [ href "http://elixir-lang.org/", target "_blank" ] [ text "Elixir" ]
-                   , text " programming language. Feel free to request the addition of videos by tweeting their URL to "
-                   , a [href "https://twitter.com/intent/tweet?text=%40elixirvideos%20", target "_blank"] [ text "@elixirvideos"]
-                   , text "." ]
+            , p
+                []
+                [ text "The directory for youtube videos for the "
+                , a [ href "http://elixir-lang.org/", target "_blank" ] [ text "Elixir" ]
+                , text " programming language. Feel free to request the addition of videos by tweeting their URL to "
+                , a [ href "https://twitter.com/intent/tweet?text=%40elixirvideos%20", target "_blank" ] [ text "@elixirvideos" ]
+                , text "."
+                ]
             , Filter.view (Signal.forwardTo address FilterAction) model.filterState
             , Table.view (Signal.forwardTo address TableAction) model.header filteredVideos
             ]

@@ -1,11 +1,10 @@
-module Main where
+module Main (..) where
 
 import Effects
 import StartApp
 import Task
 import Http
 import Videos.Main exposing (init, update, view)
-
 
 
 app =

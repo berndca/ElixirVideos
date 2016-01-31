@@ -92,13 +92,13 @@ body address props currentPage =
         if (pages props) == 1 then
             [ singleLink address 1 1 ]
         else
-            [ a [ class "icon item", onClick address (SetPage previous)] [ text "˂"] ]
+            [ a [ class "icon item", onClick address (SetPage previous) ] [ text "˂" ] ]
                 ++ [ singleLink address currentPage 1 ]
                 ++ optionalBridge (range.start > 2)
                 ++ List.map (singleLink address currentPage) [range.start..range.stop]
                 ++ optionalBridge (range.stop < (totalPages - 1))
                 ++ [ singleLink address currentPage totalPages ]
-                ++ [ a [ class "icon item", onClick address (SetPage next)] [ text "˃"] ]
+                ++ [ a [ class "icon item", onClick address (SetPage next) ] [ text "˃" ] ]
 
 
 listView : Signal.Address Action -> Props -> Int -> List Html
