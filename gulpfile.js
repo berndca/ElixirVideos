@@ -62,7 +62,7 @@ gulp.task("styles", function () {
     // AutoPrefix your CSS so it works between browsers
     .pipe($.autoprefixer("last 1 version", { cascade: true }))
     // Directory your CSS file goes to
-    .pipe(gulp.dest("serve/assets/stylesheets/"))
+    .pipe(gulp.dest("serve/assets/css/"))
     // Outputs the size of the CSS file
     .pipe($.size({title: "styles"}))
     // Injects the CSS changes to your browser since Jekyll doesn"t rebuild the CSS
@@ -79,16 +79,17 @@ gulp.task("images", function () {
       // Interlace GIFs for progressive rendering
       interlaced: true
     }))
-    .pipe(gulp.dest("dist/assets/images"))
+    .pipe(gulp.dest("dist/"))
     .pipe($.size({title: "images"}));
 });
 
-// Copy over fonts to the "dist" directory
+// Copy over fonts to the "serve" directory
 gulp.task("fonts", function () {
   return gulp.src("src/assets/fonts/**")
-    .pipe(gulp.dest("dist/assets/fonts"))
+    .pipe(gulp.dest("serve/assets/fonts"))
     .pipe($.size({ title: "fonts" }));
 });
+
 
 // Copy index.html and CNAME files to the "serve" directory
 gulp.task("copy:dev", ["copy:bower"], function () {
@@ -102,13 +103,6 @@ gulp.task("copy:bower", function () {
   return gulp.src(["bower_components/**/*"])
     .pipe(gulp.dest("serve/bower_components"))
     .pipe($.size({ title: "Bower" }))
-});
-
-// Copy images.
-gulp.task("copy:images", function () {
-  return gulp.src([])
-    .pipe(gulp.dest("serve/assets/images"))
-    .pipe($.size({ title: "Assets images" }))
 });
 
 
@@ -135,7 +129,7 @@ gulp.task("minify", ["styles"], function () {
     // Minify CSS
     .pipe($.if("*.css", $.minifyCss()))
     // Start cache busting the files
-    .pipe($.revAll({ ignore: ["index.html", ".eot", ".svg", ".ttf", ".woff"] }))
+    .pipe($.revAll({ ignore: ["index.html", ".json", ".png"] }))
     .pipe(assets.restore())
     // Replace the asset names with their cache busted names
     .pipe($.revReplace())
@@ -218,10 +212,10 @@ gulp.task("default", ["serve:dev", "watch"]);
 
 // Builds the site but doesnt serve it to you
 // @todo: Add "bower" here
-gulp.task("build", gulpSequence("clean:dev", ["styles", "copy:dev", "elm"]));
+gulp.task("build", gulpSequence("clean:dev", ["styles", "fonts", "copy:dev", "elm"]));
 
 // Builds your site with the "build" command and then runs all the optimizations on
 // it and outputs it to "./dist"
 gulp.task("publish", ["build", "clean:prod"], function () {
-  gulp.start("minify", "cname", "images", "fonts");
+  gulp.start("minify", "cname", "images");
 });
