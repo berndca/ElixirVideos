@@ -2,7 +2,6 @@ elm-stuff
 node_modules
 serve
 dist
-elm-package.json
 elm.js
 .idea
-semantic
+
